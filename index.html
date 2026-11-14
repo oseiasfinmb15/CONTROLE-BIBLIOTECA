@@ -382,11 +382,14 @@
 
   <header class="header">
     <div class="header-top">
-      <div>
-        <h1>Catálogo da Biblioteca — Consulta do Acervo</h1>
-        <p>Visão consolidada dos materiais catalogados e disponibilidade para consulta.</p>
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <img src="logo.jpg" alt="Logo Confidência 825" style="height: 52px; width: auto; object-fit: contain; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.3);" />
+        <div>
+          <h1>Catálogo da Biblioteca — Consulta do Acervo</h1>
+          <p>Visão consolidada dos materiais catalogados e disponibilidade para consulta.</p>
+        </div>
       </div>
-      <span class="badge-readonly">Modo Consulta • Atualizado em 13/11/2026</span>
+      <span class="badge-readonly" id="updateDateBadge">Modo Consulta • Atualizado em ...</span>
     </div>
 
     <nav class="tabs-bar" role="tablist">
@@ -438,7 +441,6 @@
                 </tr>
               </thead>
               <tbody>
-                
                 <tr>
                   <td>Maçonaria – Doutrina</td>
                   <td class="text-center">5</td>
@@ -540,7 +542,6 @@
                 </tr>
               </thead>
               <tbody>
-                
                 <tr>
                   <td>Livro Físico</td>
                   <td class="text-center">24</td>
@@ -605,11 +606,24 @@
           <input type="text" id="searchInput" placeholder="Buscar por código, título, autor ou editora..." oninput="filterTable()" />
           <select id="assuntoFilter" onchange="filterTable()">
             <option value="">Todos os Assuntos</option>
-            <option value="Maçonaria – Doutrina">Maçonaria – Doutrina</option><option value="Maçonaria – História">Maçonaria – História</option><option value="Maçonaria – Simbologia">Maçonaria – Simbologia</option><option value="Maçonaria – Pesquisa">Maçonaria – Pesquisa</option><option value="Maçonaria – Referência">Maçonaria – Referência</option><option value="Religião / Espiritualidade">Religião / Espiritualidade</option><option value="Literatura">Literatura</option><option value="Esoterismo / Teosofia">Esoterismo / Teosofia</option><option value="Mitologia">Mitologia</option><option value="Desenvolvimento pessoal">Desenvolvimento pessoal</option>
+            <option value="Maçonaria – Doutrina">Maçonaria – Doutrina</option>
+            <option value="Maçonaria – História">Maçonaria – História</option>
+            <option value="Maçonaria – Simbologia">Maçonaria – Simbologia</option>
+            <option value="Maçonaria – Pesquisa">Maçonaria – Pesquisa</option>
+            <option value="Maçonaria – Referência">Maçonaria – Referência</option>
+            <option value="Religião / Espiritualidade">Religião / Espiritualidade</option>
+            <option value="Literatura">Literatura</option>
+            <option value="Esoterismo / Teosofia">Esoterismo / Teosofia</option>
+            <option value="Mitologia">Mitologia</option>
+            <option value="Desenvolvimento pessoal">Desenvolvimento pessoal</option>
           </select>
           <select id="tipoFilter" onchange="filterTable()">
             <option value="">Todos os Tipos</option>
-            <option value="Livro Físico">Livro Físico</option><option value="Manual / Guia">Manual / Guia</option><option value="Obra de Referência">Obra de Referência</option><option value="Apostila / Treinamento">Apostila / Treinamento</option><option value="Revista / Periódico">Revista / Periódico</option>
+            <option value="Livro Físico">Livro Físico</option>
+            <option value="Manual / Guia">Manual / Guia</option>
+            <option value="Obra de Referência">Obra de Referência</option>
+            <option value="Apostila / Treinamento">Apostila / Treinamento</option>
+            <option value="Revista / Periódico">Revista / Periódico</option>
           </select>
           <button class="btn-clear" onclick="resetFilters()">Limpar Filtros</button>
           <span class="filter-count" id="resultCount">Exibindo 28 de 28 títulos</span>
@@ -638,7 +652,36 @@
   </main>
 
   <script>
-    const acervoData = [{"codigo": "LIV-001", "titulo": "As Grandes Religiões", "autor": "—", "editora": "Abril Cultural (provável, pelo selo da lombada)", "volume": "1", "tipo": "Livro Físico", "assunto": "Religião / Espiritualidade", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-002", "titulo": "As Grandes Religiões", "autor": "—", "editora": "Abril Cultural (provável)", "volume": "2", "tipo": "Livro Físico", "assunto": "Religião / Espiritualidade", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-003", "titulo": "As Grandes Religiões", "autor": "—", "editora": "Abril Cultural (provável)", "volume": "3", "tipo": "Livro Físico", "assunto": "Religião / Espiritualidade", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-004", "titulo": "As Grandes Religiões", "autor": "—", "editora": "Abril Cultural (provável)", "volume": "4", "tipo": "Livro Físico", "assunto": "Religião / Espiritualidade", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-005", "titulo": "As Grandes Religiões", "autor": "—", "editora": "Abril Cultural (provável)", "volume": "5", "tipo": "Livro Físico", "assunto": "Religião / Espiritualidade", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-006", "titulo": "A Maçonaria", "autor": "W. Kirk MacNulty", "editora": "Martins Fontes (trad. Marcelo Brandão Cipolla)", "volume": "", "tipo": "Livro Físico", "assunto": "Maçonaria – Simbologia", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-007", "titulo": "Dicionário de Maçonaria", "autor": "Joaquim Gervásio de Figueiredo", "editora": "Editora Pensamento", "volume": "", "tipo": "Obra de Referência", "assunto": "Maçonaria – Referência", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-008", "titulo": "Cartilha Maçônica", "autor": "João Francisco Guimarães", "editora": "Madras", "volume": "", "tipo": "Manual / Guia", "assunto": "Maçonaria – Doutrina", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-009", "titulo": "O Maçom e a Intuição", "autor": "Rizzardo da Camino", "editora": "Madras", "volume": "", "tipo": "Livro Físico", "assunto": "Maçonaria – Simbologia", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-010", "titulo": "Os Segredos do Templo de Salomão", "autor": "Kevin L. Gest", "editora": "Madras", "volume": "", "tipo": "Livro Físico", "assunto": "Maçonaria – História", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-011", "titulo": "O Manual de Hiram", "autor": "Wayne T. Adams (trad. e anot. Antonio Conehero Júnior)", "editora": "—", "volume": "", "tipo": "Apostila / Treinamento", "assunto": "Maçonaria – Doutrina", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-012", "titulo": "Grande Loja Maçônica do Estado de São Paulo – Mestre Maçom Pleno", "autor": "João Dias", "editora": "GLESP", "volume": "1 (Cap. I a XI)", "tipo": "Livro Físico", "assunto": "Maçonaria – Doutrina", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-013", "titulo": "Grande Loja Maçônica do Estado de São Paulo – Quem e Como Fizeram Sua História", "autor": "João Dias", "editora": "GLESP", "volume": "2 (Cap. V a XVII)", "tipo": "Livro Físico", "assunto": "Maçonaria – História", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-014", "titulo": "Loja Maçônica Firmeza", "autor": "—", "editora": "Itapetininga", "volume": "", "tipo": "Livro Físico", "assunto": "Maçonaria – História", "disponibilidade": "Disponível (2)"}, {"codigo": "LIV-015", "titulo": "Nos Trilhos da Maçonaria", "autor": "Sidney B. de Oliveira", "editora": "", "volume": "", "tipo": "Livro Físico", "assunto": "Maçonaria – História", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-016", "titulo": "Ars Regum 2", "autor": "A∴R∴L∴ de Pesquisa Maçônica Quatuor Coronati São Paulo nº 333", "editora": "GLESP", "volume": "2", "tipo": "Revista / Periódico", "assunto": "Maçonaria – Pesquisa", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-017", "titulo": "Os Códigos Ocultos", "autor": "Emilio Carrillo", "editora": "Madras", "volume": "", "tipo": "Livro Físico", "assunto": "Esoterismo / Teosofia", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-018", "titulo": "Compêndio de Teosofia", "autor": "C. W. Leadbeater", "editora": "Editora Pensamento", "volume": "", "tipo": "Livro Físico", "assunto": "Esoterismo / Teosofia", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-019", "titulo": "A Evolução do Princípio Inteligente", "autor": "Durval Ciamponi", "editora": "Edições FEESP (Federação Espírita do Estado de SP)", "volume": "", "tipo": "Livro Físico", "assunto": "Religião / Espiritualidade", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-020", "titulo": "Cantai ao Senhor um Canto Novo", "autor": "Diocese de Sorocaba", "editora": "Diocese de Sorocaba", "volume": "", "tipo": "Livro Físico", "assunto": "Religião / Espiritualidade", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-021", "titulo": "O Grande Livro da Mitologia Egípcia", "autor": "Claudio Blanc", "editora": "Camelot Editora", "volume": "", "tipo": "Livro Físico", "assunto": "Mitologia", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-022", "titulo": "Mentes Brilhantes", "autor": "Alberto Dell'Isola", "editora": "Universo dos Livros", "volume": "", "tipo": "Livro Físico", "assunto": "Desenvolvimento pessoal", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-023", "titulo": "A Insustentável Leveza do Ser", "autor": "Milan Kundera", "editora": "Rio Gráfica (Grandes Sucessos da Literatura Internacional)", "volume": "", "tipo": "Livro Físico", "assunto": "Literatura", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-024", "titulo": "A Divina Comédia – Inferno", "autor": "Dante Alighieri", "editora": "Principis", "volume": "1", "tipo": "Livro Físico", "assunto": "Literatura", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-025", "titulo": "A Divina Comédia – Purgatório", "autor": "Dante Alighieri", "editora": "Principis", "volume": "2", "tipo": "Livro Físico", "assunto": "Literatura", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-026", "titulo": "A Divina Comédia – Paraíso", "autor": "Dante Alighieri", "editora": "Principis", "volume": "3", "tipo": "Livro Físico", "assunto": "Literatura", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-027", "titulo": "Maçonaria: 100 Instruções de Aprendiz", "autor": "Raymundo D'Elia Junior", "editora": "Madras", "volume": "", "tipo": "Livro Físico", "assunto": "Maçonaria – Doutrina", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-028", "titulo": "Maçonaria: 50 Instruções de Companheiro", "autor": "Raymundo D'Elia Junior", "editora": "Madras", "volume": "", "tipo": "Livro Físico", "assunto": "Maçonaria – Doutrina", "disponibilidade": "Disponível (1)"}];
+    const acervoData = [
+      {"codigo": "LIV-001", "titulo": "As Grandes Religiões", "autor": "—", "editora": "Abril Cultural", "volume": "1", "tipo": "Livro Físico", "assunto": "Religião / Espiritualidade", "disponibilidade": "Disponível (1)"},
+      {"codigo": "LIV-002", "titulo": "As Grandes Religiões", "autor": "—", "editora": "Abril Cultural", "volume": "2", "tipo": "Livro Físico", "assunto": "Religião / Espiritualidade", "disponibilidade": "Disponível (1)"},
+      {"codigo": "LIV-003", "titulo": "As Grandes Religiões", "autor": "—", "editora": "Abril Cultural", "volume": "3", "tipo": "Livro Físico", "assunto": "Religião / Espiritualidade", "disponibilidade": "Disponível (1)"},
+      {"codigo": "LIV-004", "titulo": "As Grandes Religiões", "autor": "—", "editora": "Abril Cultural", "volume": "4", "tipo": "Livro Físico", "assunto": "Religião / Espiritualidade", "disponibilidade": "Disponível (1)"},
+      {"codigo": "LIV-005", "titulo": "As Grandes Religiões", "autor": "—", "editora": "Abril Cultural", "volume": "5", "tipo": "Livro Físico", "assunto": "Religião / Espiritualidade", "disponibilidade": "Disponível (1)"},
+      {"codigo": "LIV-006", "titulo": "A Maçonaria", "autor": "W. Kirk MacNulty", "editora": "Martins Fontes", "volume": "", "tipo": "Livro Físico", "assunto": "Maçonaria – Simbologia", "disponibilidade": "Disponível (1)"},
+      {"codigo": "LIV-007", "titulo": "Dicionário de Maçonaria", "autor": "Joaquim Gervásio de Figueiredo", "editora": "Editora Pensamento", "volume": "", "tipo": "Obra de Referência", "assunto": "Maçonaria – Referência", "disponibilidade": "Disponível (1)"},
+      {"codigo": "LIV-008", "titulo": "Cartilha Maçônica", "autor": "João Francisco Guimarães", "editora": "Madras", "volume": "", "tipo": "Manual / Guia", "assunto": "Maçonaria – Doutrina", "disponibilidade": "Disponível (1)"},
+      {"codigo": "LIV-009", "titulo": "O Maçom e a Intuição", "autor": "Rizzardo da Camino", "editora": "Madras", "volume": "", "tipo": "Livro Físico", "assunto": "Maçonaria – Simbologia", "disponibilidade": "Disponível (1)"},
+      {"codigo": "LIV-010", "titulo": "Os Segredos do Templo de Salomão", "autor": "Kevin L. Gest", "editora": "Madras", "volume": "", "tipo": "Livro Físico", "assunto": "Maçonaria – História", "disponibilidade": "Disponível (1)"},
+      {"codigo": "LIV-011", "titulo": "O Manual de Hiram", "autor": "Wayne T. Adams", "editora": "—", "volume": "", "tipo": "Apostila / Treinamento", "assunto": "Maçonaria – Doutrina", "disponibilidade": "Disponível (1)"},
+      {"codigo": "LIV-012", "titulo": "Grande Loja Maçônica do Estado de São Paulo – Mestre Maçom Pleno", "autor": "João Dias", "editora": "GLESP", "volume": "1 (Cap. I a XI)", "tipo": "Livro Físico", "assunto": "Maçonaria – Doutrina", "disponibilidade": "Disponível (1)"},
+      {"codigo": "LIV-013", "titulo": "Grande Loja Maçônica do Estado de São Paulo – Quem e Como Fizeram Sua História", "autor": "João Dias", "editora": "GLESP", "volume": "2 (Cap. V a XVII)", "tipo": "Livro Físico", "assunto": "Maçonaria – História", "disponibilidade": "Disponível (1)"},
+      {"codigo": "LIV-014", "titulo": "Loja Maçônica Firmeza", "autor": "—", "editora": "Itapetininga", "volume": "", "tipo": "Livro Físico", "assunto": "Maçonaria – História", "disponibilidade": "Disponível (2)"},
+      {"codigo": "LIV-015", "titulo": "Nos Trilhos da Maçonaria", "autor": "Sidney B. de Oliveira", "editora": "", "volume": "", "tipo": "Livro Físico", "assunto": "Maçonaria – História", "disponibilidade": "Disponível (1)"},
+      {"codigo": "LIV-016", "titulo": "Ars Regum 2", "autor": "A∴R∴L∴ de Pesquisa Maçônica Quatuor Coronati", "editora": "GLESP", "volume": "2", "tipo": "Revista / Periódico", "assunto": "Maçonaria – Pesquisa", "disponibilidade": "Disponível (1)"},
+      {"codigo": "LIV-017", "titulo": "Os Códigos Ocultos", "autor": "Emilio Carrillo", "editora": "Madras", "volume": "", "tipo": "Livro Físico", "assunto": "Esoterismo / Teosofia", "disponibilidade": "Disponível (1)"},
+      {"codigo": "LIV-018", "titulo": "Compêndio de Teosofia", "autor": "C. W. Leadbeater", "editora": "Editora Pensamento", "volume": "", "tipo": "Livro Físico", "assunto": "Esoterismo / Teosofia", "disponibilidade": "Disponível (1)"},
+      {"codigo": "LIV-019", "titulo": "A Evolução do Princípio Inteligente", "autor": "Durval Ciamponi", "editora": "Edições FEESP", "volume": "", "tipo": "Livro Físico", "assunto": "Religião / Espiritualidade", "disponibilidade": "Disponível (1)"},
+      {"codigo": "LIV-020", "titulo": "Cantai ao Senhor um Canto Novo", "autor": "Diocese de Sorocaba", "editora": "Diocese de Sorocaba", "volume": "", "tipo": "Livro Físico", "assunto": "Religião / Espiritualidade", "disponibilidade": "Disponível (1)"},
+      {"codigo": "LIV-021", "titulo": "O Grande Livro da Mitologia Egípcia", "autor": "Claudio Blanc", "editora": "Camelot Editora", "volume": "", "tipo": "Livro Físico", "assunto": "Mitologia", "disponibilidade": "Disponível (1)"},
+      {"codigo": "LIV-022", "titulo": "Mentes Brilhantes", "autor": "Alberto Dell'Isola", "editora": "Universo dos Livros", "volume": "", "tipo": "Livro Físico", "assunto": "Desenvolvimento pessoal", "disponibilidade": "Disponível (1)"},
+      {"codigo": "LIV-023", "titulo": "A Insustentável Leveza do Ser", "autor": "Milan Kundera", "editora": "Rio Gráfica", "volume": "", "tipo": "Livro Físico", "assunto": "Literatura", "disponibilidade": "Disponível (1)"},
+      {"codigo": "LIV-024", "titulo": "A Divina Comédia – Inferno", "autor": "Dante Alighieri", "editora": "Principis", "volume": "1", "tipo": "Livro Físico", "assunto": "Literatura", "disponibilidade": "Disponível (1)"},
+      {"codigo": "LIV-025", "titulo": "A Divina Comédia – Purgatório", "autor": "Dante Alighieri", "editora": "Principis", "volume": "2", "tipo": "Livro Físico", "assunto": "Literatura", "disponibilidade": "Disponível (1)"},
+      {"codigo": "LIV-026", "titulo": "A Divina Comédia – Paraíso", "autor": "Dante Alighieri", "editora": "Principis", "volume": "3", "tipo": "Livro Físico", "assunto": "Literatura", "disponibilidade": "Disponível (1)"},
+      {"codigo": "LIV-027", "titulo": "Maçonaria: 100 Instruções de Aprendiz", "autor": "Raymundo D'Elia Junior", "editora": "Madras", "volume": "", "tipo": "Livro Físico", "assunto": "Maçonaria – Doutrina", "disponibilidade": "Disponível (1)"},
+      {"codigo": "LIV-028", "titulo": "Maçonaria: 50 Instruções de Companheiro", "autor": "Raymundo D'Elia Junior", "editora": "Madras", "volume": "", "tipo": "Livro Físico", "assunto": "Maçonaria – Doutrina", "disponibilidade": "Disponível (1)"}
+    ];
 
     function openTab(tabName, btn) {
       document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
@@ -700,6 +743,11 @@
 
     // Initial render
     renderTable(acervoData);
+
+    // Atualiza a data automaticamente ao abrir
+    const today = new Date();
+    const formattedDate = today.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    document.getElementById('updateDateBadge').textContent = `Modo Consulta • Atualizado em ${formattedDate}`;
   </script>
 </body>
 </html>
