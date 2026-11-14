@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Catálogo da Biblioteca — Consulta Pública</title>
+  <style>
+    :root {
+      --slate-900: #0f172a;
+      --slate-800: #1e293b;
+      --slate-700: #334155;
+      --slate-600: #475569;
+      --slate-300: #cbd5e1;
+      --slate-200: #e2e8f0;
+      --slate-100: #f1f5f9;
+      --slate-50:  #f8fafc;
+      --navy:      #0f4c81;
+      --navy-light:#e0effc;
+      --green-bg:  #dcfce7;
+      --green-txt: #166534;
+      --red-bg:    #fee2e2;
+      --red-txt:   #991b1b;
+      --white:     #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--slate-100);
+      color: var(--slate-800);
+      line-height: 1.5;
+    }
+
+    /* Header Banner */
+    .header {
+      background-color: var(--slate-800);
+      color: var(--white);
+      padding: 1.5rem 2rem 0 2rem;
+      border-bottom: 3px solid var(--navy);
+    }
+
+    .header-top {
+      max-width: 1400px;
+      margin: 0 auto 1.25rem auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .header h1 {
+      font-size: 1.45rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .header p {
+      font-size: 0.9rem;
+      color: var(--slate-200);
+      margin-top: 0.25rem;
+    }
+
+    .badge-readonly {
+      background: rgba(255, 255, 255, 0.12);
+      color: var(--slate-100);
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    /* Tabs Navigation */
+    .tabs-bar {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      gap: 0.35rem;
+    }
+
+    .tab-btn {
+      background-color: var(--slate-700);
+      color: var(--slate-200);
+      border: none;
+      padding: 0.7rem 1.4rem;
+      font-size: 0.92rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      position: relative;
+    }
+
+    .tab-btn:hover {
+      background-color: #425269;
+      color: var(--white);
+    }
+
+    .tab-btn.active {
+      background-color: var(--slate-100);
+      color: var(--slate-900);
+    }
+
+    .tab-btn.active::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 12px;
+      right: 12px;
+      height: 3px;
+      background-color: #166534;
+      border-radius: 2px;
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.5rem 2rem 3rem 2rem;
+    }
+
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    /* KPI Cards */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .kpi-card {
+      background: var(--white);
+      border: 1px solid var(--slate-300);
+      border-left: 4px solid var(--navy);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+      text-align: center;
+    }
+
+    .kpi-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--slate-600);
+      letter-spacing: 0.03em;
+    }
+
+    .kpi-value {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-top: 0.25rem;
+    }
+
+    /* Summary Grid */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(460px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: var(--white);
+      border: 1px solid var(--slate-300);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+
+    .card-header {
+      background: var(--white);
+      padding: 0.9rem 1.25rem;
+      border-bottom: 1px solid var(--slate-200);
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--slate-800);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Tables */
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.86rem;
+    }
+
+    th {
+      background-color: var(--navy);
+      color: var(--white);
+      font-weight: 600;
+      text-align: left;
+      padding: 0.7rem 0.85rem;
+      white-space: nowrap;
+      border-bottom: 1px solid var(--slate-300);
+    }
+
+    .summary-table th {
+      background-color: var(--slate-700);
+    }
+
+    td {
+      padding: 0.65rem 0.85rem;
+      border-bottom: 1px solid var(--slate-200);
+      vertical-align: middle;
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: var(--slate-50);
+    }
+
+    tbody tr:hover {
+      background-color: #eef4fa;
+    }
+
+    tfoot td {
+      background-color: var(--slate-100);
+      font-weight: 700;
+      border-top: 2px solid var(--slate-300);
+      border-bottom: none;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    .code-badge {
+      font-weight: 700;
+      color: var(--navy);
+      white-space: nowrap;
+    }
+
+    .status-pill {
+      display: inline-block;
+      padding: 0.22rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .status-disp {
+      background-color: var(--green-bg);
+      color: var(--green-txt);
+    }
+
+    .status-indisp {
+      background-color: var(--red-bg);
+      color: var(--red-txt);
+    }
+
+    /* Filter Bar in Acervo */
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      padding: 1rem 1.25rem;
+      background-color: var(--slate-50);
+      border-bottom: 1px solid var(--slate-200);
+      align-items: center;
+    }
+
+    .filter-bar input,
+    .filter-bar select {
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--slate-300);
+      border-radius: 6px;
+      font-size: 0.88rem;
+      color: var(--slate-800);
+      background: var(--white);
+    }
+
+    .filter-bar input {
+      flex: 1;
+      min-width: 240px;
+    }
+
+    .filter-bar select {
+      min-width: 200px;
+    }
+
+    .filter-count {
+      font-size: 0.82rem;
+      color: var(--slate-600);
+      font-weight: 600;
+      margin-left: auto;
+    }
+
+    .btn-clear {
+      background: var(--white);
+      border: 1px solid var(--slate-300);
+      color: var(--slate-700);
+      padding: 0.5rem 0.85rem;
+      border-radius: 6px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-clear:hover {
+      background: var(--slate-200);
+    }
+
+    @media (max-width: 768px) {
+      .header { padding: 1.25rem 1rem 0 1rem; }
+      .container { padding: 1.25rem 1rem 2rem 1rem; }
+      .summary-grid { grid-template-columns: 1fr; }
+      .header-top {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .badge-readonly {
+        align-self: flex-start;
+      }
+      .tabs-bar {
+        overflow-x: auto;
+        white-space: nowrap;
+        width: 100%;
+        padding-bottom: 2px;
+      }
+      .tab-btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.85rem;
+      }
+      .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+      }
+      .kpi-card {
+        padding: 0.85rem;
+      }
+      .kpi-value {
+        font-size: 1.4rem;
+      }
+      .filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+        padding: 0.75rem;
+      }
+      .filter-bar input,
+      .filter-bar select {
+        width: 100%;
+        min-width: 0;
+      }
+      .filter-count {
+        margin-left: 0;
+        text-align: center;
+      }
+      .btn-clear {
+        width: 100%;
+        text-align: center;
+      }
+      th, td {
+        padding: 0.5rem 0.6rem;
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header-top">
+      <div>
+        <h1>Catálogo da Biblioteca — Consulta do Acervo</h1>
+        <p>Visão consolidada dos materiais catalogados e disponibilidade para consulta.</p>
+      </div>
+      <span class="badge-readonly">Modo Consulta • Atualizado em 13/11/2026</span>
+    </div>
+
+    <nav class="tabs-bar" role="tablist">
+      <button class="tab-btn active" role="tab" aria-selected="true" onclick="openTab('resumo', this)">
+        Resumo
+      </button>
+      <button class="tab-btn" role="tab" aria-selected="false" onclick="openTab('acervo', this)">
+        Acervo (Materiais)
+      </button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <!-- ABA 1: RESUMO -->
+    <section id="tab-resumo" class="tab-panel active">
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Títulos Cadastrados</div>
+          <div class="kpi-value">28</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Exemplares Totais</div>
+          <div class="kpi-value">29</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Exemplares Emprestados</div>
+          <div class="kpi-value">0</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Taxa de Disponibilidade</div>
+          <div class="kpi-value">100,0%</div>
+        </div>
+      </div>
+
+      <div class="summary-grid">
+        <!-- Tabela por Assunto -->
+        <div class="card">
+          <div class="card-header">
+            <span>Distribuição do Acervo por Assunto</span>
+          </div>
+          <div class="table-responsive">
+            <table class="summary-table">
+              <thead>
+                <tr>
+                  <th>Assunto / Categoria</th>
+                  <th class="text-center">Títulos</th>
+                  <th class="text-center">Exemplares</th>
+                  <th class="text-center">Emprestados</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                <tr>
+                  <td>Maçonaria – Doutrina</td>
+                  <td class="text-center">5</td>
+                  <td class="text-center">5</td>
+                  <td class="text-center">0</td>
+                </tr>
+                <tr>
+                  <td>Maçonaria – História</td>
+                  <td class="text-center">4</td>
+                  <td class="text-center">5</td>
+                  <td class="text-center">0</td>
+                </tr>
+                <tr>
+                  <td>Maçonaria – Simbologia</td>
+                  <td class="text-center">2</td>
+                  <td class="text-center">2</td>
+                  <td class="text-center">0</td>
+                </tr>
+                <tr>
+                  <td>Maçonaria – Pesquisa</td>
+                  <td class="text-center">1</td>
+                  <td class="text-center">1</td>
+                  <td class="text-center">0</td>
+                </tr>
+                <tr>
+                  <td>Maçonaria – Referência</td>
+                  <td class="text-center">1</td>
+                  <td class="text-center">1</td>
+                  <td class="text-center">0</td>
+                </tr>
+                <tr>
+                  <td>Religião / Espiritualidade</td>
+                  <td class="text-center">7</td>
+                  <td class="text-center">7</td>
+                  <td class="text-center">0</td>
+                </tr>
+                <tr>
+                  <td>Literatura</td>
+                  <td class="text-center">4</td>
+                  <td class="text-center">4</td>
+                  <td class="text-center">0</td>
+                </tr>
+                <tr>
+                  <td>Esoterismo / Teosofia</td>
+                  <td class="text-center">2</td>
+                  <td class="text-center">2</td>
+                  <td class="text-center">0</td>
+                </tr>
+                <tr>
+                  <td>Mitologia</td>
+                  <td class="text-center">1</td>
+                  <td class="text-center">1</td>
+                  <td class="text-center">0</td>
+                </tr>
+                <tr>
+                  <td>Desenvolvimento pessoal</td>
+                  <td class="text-center">1</td>
+                  <td class="text-center">1</td>
+                  <td class="text-center">0</td>
+                </tr>
+                <tr>
+                  <td>Administração & Gestão</td>
+                  <td class="text-center">0</td>
+                  <td class="text-center">0</td>
+                  <td class="text-center">0</td>
+                </tr>
+                <tr>
+                  <td>Filosofia & História Geral</td>
+                  <td class="text-center">0</td>
+                  <td class="text-center">0</td>
+                  <td class="text-center">0</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td>TOTAL GERAL</td>
+                  <td class="text-center">28</td>
+                  <td class="text-center">29</td>
+                  <td class="text-center">0</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+
+        <!-- Tabela por Tipo de Material -->
+        <div class="card">
+          <div class="card-header">
+            <span>Distribuição por Tipo de Material</span>
+          </div>
+          <div class="table-responsive">
+            <table class="summary-table">
+              <thead>
+                <tr>
+                  <th>Tipo de Material</th>
+                  <th class="text-center">Títulos</th>
+                  <th class="text-center">Exemplares</th>
+                  <th class="text-center">% do Acervo</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                <tr>
+                  <td>Livro Físico</td>
+                  <td class="text-center">24</td>
+                  <td class="text-center">25</td>
+                  <td class="text-center">86,2%</td>
+                </tr>
+                <tr>
+                  <td>Manual / Guia</td>
+                  <td class="text-center">1</td>
+                  <td class="text-center">1</td>
+                  <td class="text-center">3,4%</td>
+                </tr>
+                <tr>
+                  <td>Obra de Referência</td>
+                  <td class="text-center">1</td>
+                  <td class="text-center">1</td>
+                  <td class="text-center">3,4%</td>
+                </tr>
+                <tr>
+                  <td>Apostila / Treinamento</td>
+                  <td class="text-center">1</td>
+                  <td class="text-center">1</td>
+                  <td class="text-center">3,4%</td>
+                </tr>
+                <tr>
+                  <td>Revista / Periódico</td>
+                  <td class="text-center">1</td>
+                  <td class="text-center">1</td>
+                  <td class="text-center">3,4%</td>
+                </tr>
+                <tr>
+                  <td>Norma / Legislação</td>
+                  <td class="text-center">0</td>
+                  <td class="text-center">0</td>
+                  <td class="text-center">0,0%</td>
+                </tr>
+                <tr>
+                  <td>Mídia Digital / DVD</td>
+                  <td class="text-center">0</td>
+                  <td class="text-center">0</td>
+                  <td class="text-center">0,0%</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td>TOTAL GERAL</td>
+                  <td class="text-center">28</td>
+                  <td class="text-center">29</td>
+                  <td class="text-center">100,0%</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABA 2: ACERVO (MATERIAIS) -->
+    <section id="tab-acervo" class="tab-panel">
+      <div class="card">
+        <div class="filter-bar">
+          <input type="text" id="searchInput" placeholder="Buscar por código, título, autor ou editora..." oninput="filterTable()" />
+          <select id="assuntoFilter" onchange="filterTable()">
+            <option value="">Todos os Assuntos</option>
+            <option value="Maçonaria – Doutrina">Maçonaria – Doutrina</option><option value="Maçonaria – História">Maçonaria – História</option><option value="Maçonaria – Simbologia">Maçonaria – Simbologia</option><option value="Maçonaria – Pesquisa">Maçonaria – Pesquisa</option><option value="Maçonaria – Referência">Maçonaria – Referência</option><option value="Religião / Espiritualidade">Religião / Espiritualidade</option><option value="Literatura">Literatura</option><option value="Esoterismo / Teosofia">Esoterismo / Teosofia</option><option value="Mitologia">Mitologia</option><option value="Desenvolvimento pessoal">Desenvolvimento pessoal</option>
+          </select>
+          <select id="tipoFilter" onchange="filterTable()">
+            <option value="">Todos os Tipos</option>
+            <option value="Livro Físico">Livro Físico</option><option value="Manual / Guia">Manual / Guia</option><option value="Obra de Referência">Obra de Referência</option><option value="Apostila / Treinamento">Apostila / Treinamento</option><option value="Revista / Periódico">Revista / Periódico</option>
+          </select>
+          <button class="btn-clear" onclick="resetFilters()">Limpar Filtros</button>
+          <span class="filter-count" id="resultCount">Exibindo 28 de 28 títulos</span>
+        </div>
+
+        <div class="table-responsive">
+          <table id="acervoTable">
+            <thead>
+              <tr>
+                <th class="text-center">Código</th>
+                <th>Título</th>
+                <th>Autor</th>
+                <th>Editora / Instituição</th>
+                <th class="text-center">Vol.</th>
+                <th>Tipo de Material</th>
+                <th>Assunto</th>
+                <th class="text-center">Disponibilidade</th>
+              </tr>
+            </thead>
+            <tbody id="acervoBody">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const acervoData = [{"codigo": "LIV-001", "titulo": "As Grandes Religiões", "autor": "—", "editora": "Abril Cultural (provável, pelo selo da lombada)", "volume": "1", "tipo": "Livro Físico", "assunto": "Religião / Espiritualidade", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-002", "titulo": "As Grandes Religiões", "autor": "—", "editora": "Abril Cultural (provável)", "volume": "2", "tipo": "Livro Físico", "assunto": "Religião / Espiritualidade", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-003", "titulo": "As Grandes Religiões", "autor": "—", "editora": "Abril Cultural (provável)", "volume": "3", "tipo": "Livro Físico", "assunto": "Religião / Espiritualidade", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-004", "titulo": "As Grandes Religiões", "autor": "—", "editora": "Abril Cultural (provável)", "volume": "4", "tipo": "Livro Físico", "assunto": "Religião / Espiritualidade", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-005", "titulo": "As Grandes Religiões", "autor": "—", "editora": "Abril Cultural (provável)", "volume": "5", "tipo": "Livro Físico", "assunto": "Religião / Espiritualidade", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-006", "titulo": "A Maçonaria", "autor": "W. Kirk MacNulty", "editora": "Martins Fontes (trad. Marcelo Brandão Cipolla)", "volume": "", "tipo": "Livro Físico", "assunto": "Maçonaria – Simbologia", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-007", "titulo": "Dicionário de Maçonaria", "autor": "Joaquim Gervásio de Figueiredo", "editora": "Editora Pensamento", "volume": "", "tipo": "Obra de Referência", "assunto": "Maçonaria – Referência", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-008", "titulo": "Cartilha Maçônica", "autor": "João Francisco Guimarães", "editora": "Madras", "volume": "", "tipo": "Manual / Guia", "assunto": "Maçonaria – Doutrina", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-009", "titulo": "O Maçom e a Intuição", "autor": "Rizzardo da Camino", "editora": "Madras", "volume": "", "tipo": "Livro Físico", "assunto": "Maçonaria – Simbologia", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-010", "titulo": "Os Segredos do Templo de Salomão", "autor": "Kevin L. Gest", "editora": "Madras", "volume": "", "tipo": "Livro Físico", "assunto": "Maçonaria – História", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-011", "titulo": "O Manual de Hiram", "autor": "Wayne T. Adams (trad. e anot. Antonio Conehero Júnior)", "editora": "—", "volume": "", "tipo": "Apostila / Treinamento", "assunto": "Maçonaria – Doutrina", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-012", "titulo": "Grande Loja Maçônica do Estado de São Paulo – Mestre Maçom Pleno", "autor": "João Dias", "editora": "GLESP", "volume": "1 (Cap. I a XI)", "tipo": "Livro Físico", "assunto": "Maçonaria – Doutrina", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-013", "titulo": "Grande Loja Maçônica do Estado de São Paulo – Quem e Como Fizeram Sua História", "autor": "João Dias", "editora": "GLESP", "volume": "2 (Cap. V a XVII)", "tipo": "Livro Físico", "assunto": "Maçonaria – História", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-014", "titulo": "Loja Maçônica Firmeza", "autor": "—", "editora": "Itapetininga", "volume": "", "tipo": "Livro Físico", "assunto": "Maçonaria – História", "disponibilidade": "Disponível (2)"}, {"codigo": "LIV-015", "titulo": "Nos Trilhos da Maçonaria", "autor": "Sidney B. de Oliveira", "editora": "", "volume": "", "tipo": "Livro Físico", "assunto": "Maçonaria – História", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-016", "titulo": "Ars Regum 2", "autor": "A∴R∴L∴ de Pesquisa Maçônica Quatuor Coronati São Paulo nº 333", "editora": "GLESP", "volume": "2", "tipo": "Revista / Periódico", "assunto": "Maçonaria – Pesquisa", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-017", "titulo": "Os Códigos Ocultos", "autor": "Emilio Carrillo", "editora": "Madras", "volume": "", "tipo": "Livro Físico", "assunto": "Esoterismo / Teosofia", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-018", "titulo": "Compêndio de Teosofia", "autor": "C. W. Leadbeater", "editora": "Editora Pensamento", "volume": "", "tipo": "Livro Físico", "assunto": "Esoterismo / Teosofia", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-019", "titulo": "A Evolução do Princípio Inteligente", "autor": "Durval Ciamponi", "editora": "Edições FEESP (Federação Espírita do Estado de SP)", "volume": "", "tipo": "Livro Físico", "assunto": "Religião / Espiritualidade", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-020", "titulo": "Cantai ao Senhor um Canto Novo", "autor": "Diocese de Sorocaba", "editora": "Diocese de Sorocaba", "volume": "", "tipo": "Livro Físico", "assunto": "Religião / Espiritualidade", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-021", "titulo": "O Grande Livro da Mitologia Egípcia", "autor": "Claudio Blanc", "editora": "Camelot Editora", "volume": "", "tipo": "Livro Físico", "assunto": "Mitologia", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-022", "titulo": "Mentes Brilhantes", "autor": "Alberto Dell'Isola", "editora": "Universo dos Livros", "volume": "", "tipo": "Livro Físico", "assunto": "Desenvolvimento pessoal", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-023", "titulo": "A Insustentável Leveza do Ser", "autor": "Milan Kundera", "editora": "Rio Gráfica (Grandes Sucessos da Literatura Internacional)", "volume": "", "tipo": "Livro Físico", "assunto": "Literatura", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-024", "titulo": "A Divina Comédia – Inferno", "autor": "Dante Alighieri", "editora": "Principis", "volume": "1", "tipo": "Livro Físico", "assunto": "Literatura", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-025", "titulo": "A Divina Comédia – Purgatório", "autor": "Dante Alighieri", "editora": "Principis", "volume": "2", "tipo": "Livro Físico", "assunto": "Literatura", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-026", "titulo": "A Divina Comédia – Paraíso", "autor": "Dante Alighieri", "editora": "Principis", "volume": "3", "tipo": "Livro Físico", "assunto": "Literatura", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-027", "titulo": "Maçonaria: 100 Instruções de Aprendiz", "autor": "Raymundo D'Elia Junior", "editora": "Madras", "volume": "", "tipo": "Livro Físico", "assunto": "Maçonaria – Doutrina", "disponibilidade": "Disponível (1)"}, {"codigo": "LIV-028", "titulo": "Maçonaria: 50 Instruções de Companheiro", "autor": "Raymundo D'Elia Junior", "editora": "Madras", "volume": "", "tipo": "Livro Físico", "assunto": "Maçonaria – Doutrina", "disponibilidade": "Disponível (1)"}];
+
+    function openTab(tabName, btn) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      document.getElementById('tab-' + tabName).classList.add('active');
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+    }
+
+    function renderTable(data) {
+      const tbody = document.getElementById('acervoBody');
+      tbody.innerHTML = data.map(item => {
+        const isDisp = item.disponibilidade.startsWith('Disponível');
+        const statusClass = isDisp ? 'status-disp' : 'status-indisp';
+        return `
+          <tr>
+            <td class="text-center code-badge">${item.codigo}</td>
+            <td><strong>${item.titulo}</strong></td>
+            <td>${item.autor || '—'}</td>
+            <td>${item.editora || '—'}</td>
+            <td class="text-center">${item.volume || '—'}</td>
+            <td>${item.tipo}</td>
+            <td>${item.assunto}</td>
+            <td class="text-center"><span class="status-pill ${statusClass}">${item.disponibilidade}</span></td>
+          </tr>
+        `;
+      }).join('');
+      document.getElementById('resultCount').textContent = `Exibindo ${data.length} de ${acervoData.length} títulos`;
+    }
+
+    function filterTable() {
+      const q = document.getElementById('searchInput').value.toLowerCase().trim();
+      const assunto = document.getElementById('assuntoFilter').value;
+      const tipo = document.getElementById('tipoFilter').value;
+
+      const filtered = acervoData.filter(item => {
+        const matchAssunto = !assunto || item.assunto === assunto;
+        const matchTipo = !tipo || item.tipo === tipo;
+        const haystack = [
+          item.codigo, item.titulo, item.autor,
+          item.editora, item.assunto
+        ].join(' ').toLowerCase();
+        const matchQuery = !q || haystack.includes(q);
+        return matchAssunto && matchTipo && matchQuery;
+      });
+
+      renderTable(filtered);
+    }
+
+    function resetFilters() {
+      document.getElementById('searchInput').value = '';
+      document.getElementById('assuntoFilter').value = '';
+      document.getElementById('tipoFilter').value = '';
+      renderTable(acervoData);
+    }
+
+    // Initial render
+    renderTable(acervoData);
+  </script>
+</body>
+</html>
